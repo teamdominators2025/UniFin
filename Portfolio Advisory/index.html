@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Adviser - Risk Assessment</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Portfolio Adviser</h1>
+            <p>Discover your investment personality</p>
+        </header>
+
+        <div class="quiz-container" id="quiz-card">
+            <div id="question-section">
+                <h2 id="question-text">Loading question...</h2>
+                <div id="options-container" class="options">
+                    </div>
+                <div class="progress-bar">
+                    <div id="progress" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div id="result-section" class="hidden">
+                <div class="result-header">
+                    <h2>Your Profile: <span id="profile-name"></span></h2>
+                    <p id="profile-desc"></p>
+                </div>
+
+                <div class="advice-box">
+                    <h3>Here are some insights/suggestions for you:</h3>
+                    <ul id="advice-list">
+                        </ul>
+                </div>
+
+                <button onclick="location.reload()" class="retry-btn">Retake Quiz</button>
+            </div>
+        </div>
+        <section class="expert-corner">
+            <h2 class="section-title">Expert Corner</h2>
+    
+            <div class="content-hub-box">
+                <div class="expert-header">
+                 <span class="badge">CURATED FOR 2026</span>
+                 <h3>Top Analyst Strategies & Deep Dives</h3>
+                </div>
+                <div class="video-grid">
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <video width="100%" height="315" controls style="display: block; border-radius: 8px;">
+                                <source src="c:\Users\User\Downloads\WhatsApp Video 2026-01-20 at 10.52.20 PM.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="video-info">
+                            <h4>Risk-Based Allocation</h4>
+                            <p>How to divide your capital based on your specific profile results.</p>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <video width="100%" height="315" controls style="display: block; border-radius: 8px;">
+                                <source src="c:\Users\User\Downloads\WhatsApp Video 2026-01-20 at 10.48.14 PM.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="video-info">
+                            <h4>2026 Growth Strategy</h4>
+                            <p>Advanced insights on equities and high-growth sectors for aggressive portfolios.</p>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-wrapper">
+                            <video width="100%" height="315" controls style="display: block; border-radius: 8px;">
+                                <source src="c:\Users\User\Downloads\1768891540.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <div class="video-info">
+                            <h4>Stability Masterclass</h4>
+                            <p>Practical steps to ensure your portfolio remains stable during market volatility.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="deep-dive-footer">
+                 <h4>Expert Consensus for Q1 2026:</h4>
+                  <p>
+                     Leading analysts agree that <strong>2026 is the year of "Selective Growth."</strong> Whether you are Conservative or Aggressive, the focus must be on high-quality assets. Avoid speculative "hype" and look for sectors like Green Energy, AI-driven Tech, and Dividend-paying Blue Chips.
+                 </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
