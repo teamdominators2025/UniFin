@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheme Finder - Hackathon Project</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="hero">
+        <div class="overlay">
+            <h1>Scheme <span class="highlight">Finder</span></h1>
+            <p>Discover Financial Pathways: Government & Banking Solutions for Everyone.</p>
+            
+            <div class="main-buttons">
+                <button onclick="showSection('gov')" class="btn primary-btn">
+                    <i class="fa-solid fa-landmark"></i> Government Schemes
+                </button>
+                <button onclick="showSection('bank')" class="btn secondary-btn">
+                    <i class="fa-solid fa-building-columns"></i> Bank Schemes
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section id="gov-section" class="content-section hidden">
+            <h2 class="section-title">Government Schemes</h2>
+            <p class="section-desc">Explore various initiatives by the government for welfare and development.</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <img src="img1.jpg" alt="Financial Inclusion">
+                    <h3>Financial Inclusion</h3>
+                    <p>Basic banking services ensuring access to financial products for weaker sections.</p>
+                    <a href="https://financialservices.gov.in/" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 2.jpg" alt="Savings">
+                    <h3>Savings & Investment</h3>
+                    <p>Schemes to encourage saving habits and wealth creation for citizens.</p>
+                    <a href="https://www.myscheme.gov.in/" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 3.jpg" alt="Insurance">
+                    <h3>Insurance Scheme</h3>
+                    <p>Life and accident insurance coverage at affordable premiums.</p>
+                    <a href="https://financialservices.gov.in/insurance-divisions" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 4.jpg" alt="Pension">
+                    <h3>Pension & Social Security</h3>
+                    <p>Old age protection and social security for the unorganized sector.</p>
+                    <a href="https://www.india.gov.in/people-groups/life-cycle/senior-citizens/pension" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 5.jpg" alt="Credit">
+                    <h3>Credit & Loan Scheme</h3>
+                    <p>Easy access to credit for business, housing, and personal needs.</p>
+                    <a href="https://www.mudra.org.in/" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 6.jpg" alt="Women">
+                    <h3>Women-Centric Scheme</h3>
+                    <p>Empowering women through financial independence and support.</p>
+                    <a href="https://wcd.nic.in/schemes-listing" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 7.jpg" alt="Agriculture">
+                    <h3>Agricultural Scheme</h3>
+                    <p>Support for farmers regarding crop insurance, loans, and subsidies.</p>
+                    <a href="https://agricoop.nic.in/" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 8.jpg" alt="Education">
+                    <h3>Education & Skill</h3>
+                    <p>Scholarships and skill development programs for youth.</p>
+                    <a href="https://www.education.gov.in/" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 9.jpg" alt="Employment">
+                    <h3>Employment & Livelihood</h3>
+                    <p>Generating employment opportunities in rural and urban areas.</p>
+                    <a href="https://dms.msme.gov.in/" target="_blank">Learn More &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <img src="img 10.jpg" alt="Reserved">
+                    <h3>Reserved Categories</h3>
+                    <p>Special welfare schemes for SC/ST/OBC and minority communities.</p>
+                    <a href="https://socialjustice.gov.in/" target="_blank">Learn More &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="bank-section" class="content-section hidden">
+            <h2 class="section-title">Bank Schemes</h2>
+            <p class="section-desc">Choose between Public Sector and Private Sector banking offers.</p>
+
+            <div class="bank-toggles">
+                <button onclick="toggleBankType('public')" id="btn-public" class="bank-btn active">Public Bank Schemes</button>
+                <button onclick="toggleBankType('private')" id="btn-private" class="bank-btn">Private Bank Schemes</button>
+            </div>
+
+            <div id="public-bank-content" class="bank-content">
+                <div class="card-grid">
+                    <div class="card">
+                        <img src="a.png" alt="PMJDY">
+                        <h3>PMJDY</h3>
+                        <p>Pradhan Mantri Jan Dhan Yojana: National mission for financial inclusion.</p>
+                        <a href="https://pmjdy.gov.in/" target="_blank">Visit Site &rarr;</a>
+                    </div>
+                    <div class="card">
+                        <img src="b.png" alt="PMSBY">
+                        <h3>PMSBY</h3>
+                        <p>Pradhan Mantri Suraksha Bima Yojana: Accidental insurance cover.</p>
+                        <a href="https://financialservices.gov.in/beta/en/pmsby" target="_blank">Visit Site &rarr;</a>
+                    </div>
+                    <div class="card">
+                        <img src="c.jpg" alt="PMJJBY">
+                        <h3>PMJJBY</h3>
+                        <p>Pradhan Mantri Jeevan Jyoti Bima Yojana: Life insurance cover.</p>
+                        <a href="https://financialservices.gov.in/beta/en/pmjjby" target="_blank">Visit Site &rarr;</a>
+                    </div>
+                    <div class="card">
+                        <img src="d.png" alt="APY">
+                        <h3>APY</h3>
+                        <p>Atal Pension Yojana: Pension scheme for the unorganized sector.</p>
+                        <a href="https://www.npscra.nsdl.co.in/scheme-details.php" target="_blank">Visit Site &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="private-bank-content" class="bank-content hidden">
+                <div class="card-grid">
+                    <div class="card">
+                        <img src="e.png" alt="HDFC">
+                        <h3>HDFC Imperia</h3>
+                        <p>Premium banking services with exclusive wealth management solutions.</p>
+                        <a href="https://www.hdfcbank.com/" target="_blank">Visit Site &rarr;</a>
+                    </div>
+                    <div class="card">
+                        <img src="f.png" alt="HSBC">
+                        <h3>HSBC Private Banking</h3>
+                        <p>International banking and investment solutions for high net-worth individuals.</p>
+                        <a href="https://www.hsbc.co.in/" target="_blank">Visit Site &rarr;</a>
+                    </div>
+                    <div class="card">
+                        <img src="g.jpg" alt="ICICI">
+                        <h3>ICICI Privilege</h3>
+                        <p>Priority banking with lifestyle privileges and dedicated managers.</p>
+                        <a href="https://www.icicibank.com/" target="_blank">Visit Site &rarr;</a>
+                    </div>
+                    <div class="card">
+                        <img src="h.jpg" alt="Axis">
+                        <h3>Axis Burgundy</h3>
+                        <p>A premium banking experience curated for your lifestyle needs.</p>
+                        <a href="https://www.axisbank.com/" target="_blank">Visit Site &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
