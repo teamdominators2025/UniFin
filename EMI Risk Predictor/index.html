@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIFIN | EMI Risk Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-[#0a192f] text-slate-100 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold tracking-tight text-white">EMI RISK PREDICTOR</h1>
+            <p class="text-blue-400 font-medium mt-1">Planning • Growth • Future Readiness</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <section class="lg:col-span-4 bg-white text-slate-800 p-6 rounded-2xl shadow-2xl">
+                <h3 class="text-lg font-bold mb-6 border-b pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-blue-600"></i> Financial Profile
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase">Monthly Income Range</label>
+                        <select id="income" class="w-full p-2 bg-slate-50 border rounded-lg outline-none focus:ring-2 ring-blue-500">
+                            <option value="30000">₹20k - ₹40k</option>
+                            <option value="60000">₹40k - ₹80k</option>
+                            <option value="100000">₹80k+</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Existing EMIs</label>
+                            <input type="number" id="emi" value="15000" class="w-full p-2 bg-slate-50 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Rent & Utilities</label>
+                            <input type="number" id="rent" value="8000" class="w-full p-2 bg-slate-50 border rounded-lg">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase">Lifestyle Expenses</label>
+                        <input type="number" id="lifestyle" value="5000" class="w-full p-2 bg-slate-50 border rounded-lg">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Emergency Fund</label>
+                            <input type="number" id="emergency" value="10000" class="w-full p-2 bg-slate-50 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Stability Type</label>
+                            <select id="stability" class="w-full p-2 bg-slate-50 border rounded-lg">
+                                <option value="1">Fixed</option>
+                                <option value="1.2">Variable</option>
+                                <option value="1.5">Seasonal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="calculateStress()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-900/20">
+                        Calculate Risk Score
+                    </button>
+                </div>
+            </section>
+
+            <section class="lg:col-span-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white text-slate-800 p-6 rounded-3xl shadow-xl text-center flex flex-col items-center">
+                        <h3 class="text-xs font-black text-gray-400 uppercase mb-4 tracking-tighter">Financial Stress Score (0-100)</h3>
+                        <div class="gauge-container relative">
+                            <div class="gauge-bg"></div>
+                            <div id="gauge-fill" class="gauge-fill"></div>
+                            <div class="gauge-center">
+                                <span id="score-val" class="text-5xl font-black">0</span>
+                                <p id="zone-text" class="text-xs font-bold text-slate-500 uppercase mt-2">Enter Data</p>
+                            </div>
+                            <div id="needle" class="gauge-needle"></div>
+                        </div>
+                        <p class="text-sm mt-4 text-slate-500 font-medium" id="friendly-advice">Analysis pending input...</p>
+                        <div class="flex gap-4 mt-4 text-[10px] font-bold">
+                            <span class="text-emerald-500">● 0-30 SAFE</span>
+                            <span class="text-yellow-500">● 31-60 WATCH</span>
+                            <span class="text-red-500">● 61-100 HIGH</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white text-slate-800 p-6 rounded-3xl shadow-xl flex flex-col">
+                        <h3 class="text-xs font-black text-gray-400 uppercase mb-4 tracking-tighter">Future Default Prediction</h3>
+                        <div class="flex-grow min-h-[180px]">
+                            <canvas id="predictionChart"></canvas>
+                        </div>
+                        <p class="text-[10px] text-center text-slate-400 mt-2">Next 3-6 Months Simulation</p>
+                    </div>
+                </div>
+
+                <div class="bg-white text-slate-800 p-6 rounded-3xl shadow-xl">
+                    <h3 class="text-md font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-microchip text-blue-500"></i> AI Suggestions</h3>
+                    <div id="ai-suggestions-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <p class="text-sm text-slate-400 italic">Complete calculations to see recommendations.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="mt-12 bg-slate-900/50 p-8 rounded-[40px] border border-slate-800">
+            <h2 class="text-2xl font-bold mb-8 flex items-center gap-2 text-blue-400">
+                <i class="fa-solid fa-user-check"></i> Citizen View Dashboard
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="citizen-summary">
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 text-center">
+                    <div class="text-3xl font-black text-emerald-400" id="cv-improvement">0%</div>
+                    <div class="text-xs uppercase font-bold text-slate-400 mt-1">Improvement Potential</div>
+                </div>
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 text-center">
+                    <div class="text-3xl font-black text-blue-400" id="cv-ratio">0%</div>
+                    <div class="text-xs uppercase font-bold text-slate-400 mt-1">EMI-to-Income Ratio</div>
+                </div>
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 text-center">
+                    <div class="text-3xl font-black text-orange-400" id="cv-buffer">0 mo</div>
+                    <div class="text-xs uppercase font-bold text-slate-400 mt-1">Safe Buffer Days</div>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                <span>Unified Risk Analysis Report</span>
+                <span>Powered by UNIFIN AI</span>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
