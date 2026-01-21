@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UNIFIN | Capital Sentinel v13.5 (Light Resilient)</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        :root { 
+            --p: #4f46e5; 
+            --d: #dc2626; 
+            --s: #059669; 
+            --bg: #f8fafc; 
+            --glass: rgba(255, 255, 255, 0.8); 
+            --warn: #d97706; 
+            --accent: #0ea5e9;
+            --text: #1e293b;
+            --border: rgba(0,0,0,0.1);
+        }
+        
+        body { 
+            margin: 0; 
+            font-family: 'Inter', system-ui, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            overflow: hidden; 
+        }
+
+        .bg-animate { 
+            position: fixed; 
+            inset: 0; 
+            z-index: -1; 
+            background: radial-gradient(circle at 50% 50%, #f1f5f9 0%, #e2e8f0 100%);
+        }
+        
+        .orb { 
+            position: absolute; 
+            border-radius: 50%; 
+            filter: blur(80px); 
+            opacity: 0.2;
+            animation: float 12s infinite alternate ease-in-out; 
+        }
+        .o1 { width: 600px; height: 600px; background: var(--p); top: -10%; left: -10%; }
+        .o2 { width: 500px; height: 500px; background: #c084fc; bottom: -5%; right: -5%; animation-delay: -6s; }
+        
+        @keyframes float { 
+            from { transform: translate(0,0) scale(1) rotate(0deg); } 
+            to { transform: translate(100px, 50px) scale(1.2) rotate(15deg); } 
+        }
+
+        .container { 
+            display: grid; 
+            grid-template-columns: 340px 1fr 340px; 
+            gap: 20px; 
+            padding: 25px; 
+            height: 100vh; 
+            box-sizing: border-box; 
+        }
+
+        .panel { 
+            background: var(--glass); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid var(--border); 
+            border-radius: 24px; 
+            padding: 22px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            display: flex; 
+            flex-direction: column; 
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .panel:hover { border-color: var(--p); }
+
+        .hud-label { 
+            font-size: 0.7rem; 
+            font-weight: 800; 
+            color: var(--p); 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .big-val { font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; color: var(--text); }
+        
+        #aiAdviceHUD { 
+            margin-bottom: 15px; padding: 16px; border-radius: 18px; 
+            font-size: 0.85rem; font-weight: 500; border-left: 5px solid #cbd5e1;
+            background: #fff; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1.6; color: #475569;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .adv-safe { border-left-color: var(--s) !important; }
+        .adv-warn { border-left-color: var(--warn) !important; animation: pulse 2s infinite; }
+        .adv-danger { border-left-color: var(--d) !important; background: #fff1f2 !important; animation: shake 0.5s infinite; }
+
+        .btn { 
+            width: 100%; padding: 14px; border-radius: 14px; border: none; 
+            font-weight: 700; cursor: pointer; transition: 0.2s; 
+            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;
+        }
+        .btn-p { background: var(--p); color: white; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); }
+        .btn-s { background: #fff; color: var(--text); border: 1px solid var(--border); margin-bottom: 10px; }
+        .btn-stop { background: var(--d); color: white; margin-top: auto; font-weight: 900; }
+
+        #voicePrintBox { height: 160px; background: #fff; border-radius: 20px; margin-top: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+        #visualizer { height: 80px; width: 100%; background: #f1f5f9; border-radius: 15px; margin: 15px 0; }
+        #transcript { flex-grow: 1; overflow-y: auto; font-size: 0.9rem; color: #475569; line-height: 1.6; padding: 10px; background: #fff; border-radius: 12px; border: 1px solid var(--border); }
+        #threatMap { height: 180px; border-radius: 20px; margin-top: 15px; border: 1px solid var(--border); }
+
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; font-weight: 700; }
+        .resilience-meter { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin-bottom: 15px; }
+        .resilience-fill { height: 100%; width: 100%; background: var(--s); transition: 0.5s; }
+
+        #finalVerdict { position: fixed; inset:0; background: rgba(255, 255, 255, 0.9); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .v-box { padding: 40px; border-radius: 32px; border: 1px solid var(--border); background: #fff; width: 480px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.2); }
+        #logList { font-size: 0.7rem; color: #64748b; max-height: 120px; overflow-y: auto; }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-2px); } 75% { transform: translateX(2px); } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animate"><div class="orb o1"></div><div class="orb o2"></div></div>
+
+    <div id="finalVerdict">
+        <div class="v-box">
+            <h1 id="vTitle" style="font-size: 2rem; margin-bottom: 10px;">GENERATING FINAL VERDICT...</h1>
+            <p id="vDesc" style="color:#64748b; margin-bottom: 30px;">Analyzing keywords and frequency variations.</p>
+            <div style="height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; margin: 20px 0;">
+                <div id="vBar" style="height:100%; width: 0%; transition: 1.5s;"></div>
+            </div>
+            <div style="display:flex; gap:12px;">
+                <button class="btn btn-p" onclick="downloadReport()">📥 Export Report</button>
+                <button class="btn btn-s" onclick="location.reload()">🔄 Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="panel">
+            <div class="hud-label">📡 Monitoring Node</div>
+            <div class="big-val" id="nodeName">DELHI_SENTINEL_7</div>
+            <div style="font-size:0.75rem; color: var(--p); font-family: monospace;">
+                LAT/LONG: <span id="coords">28.6139, 77.2090</span><br>
+                NETWORK HOPS: <span id="hops">0</span>
+            </div>
+            
+            <hr style="border:0; border-top:1px solid var(--border); margin: 20px 0;">
+            
+            <div class="hud-label">🧬 Voice Biometrics</div>
+            <div id="voicePrintBox"><canvas id="vpCanvas" width="300" height="160"></canvas></div>
+            <div id="threatMap"></div>
+        </div>
+
+        <div class="panel">
+            <div id="statusHUD" style="text-align:center; font-weight:900; padding:10px; border-radius:10px; background:#fff; border:1px solid var(--border); font-size:0.65rem; letter-spacing:2px; margin-bottom:15px; color: var(--p);">SYSTEM: READY // AWAITING FREQUENCY</div>
+            <div id="aiAdviceHUD"><b>AI ADVISOR:</b> Secure line established. Initiate "Shield" for analysis.</div>
+            <canvas id="visualizer"></canvas>
+            <div id="transcript">Interpreting signal...</div>
+            <button id="stopBtn" class="btn btn-stop">🛑 Terminate & Generate Verdict</button>
+        </div>
+
+        <div class="panel">
+            <div class="hud-label">🛡️ Resilience & Threat</div>
+            
+            <div class="stat-row"><span>SYSTEM RESILIENCE</span><span id="resVal" style="color:var(--s)">100%</span></div>
+            <div class="resilience-meter"><div id="resFill" class="resilience-fill"></div></div>
+
+            <div class="stat-row"><span>THREAT PROBABILITY</span><span id="threatVal" style="color:var(--d)">0%</span></div>
+            <div class="resilience-meter"><div id="threatFill" class="resilience-fill" style="width:0%; background:var(--d)"></div></div>
+
+            <div class="stat-row"><span>HUMAN ANALOG</span><span id="hCount" style="color:var(--s)">0</span></div>
+            <div class="stat-row" style="margin-bottom:20px;"><span>AI SYNTHETIC</span><span id="aCount" style="color:var(--d)">0</span></div>
+            
+            <button id="startBtn" class="btn btn-p">🛡️ Activate Shield</button>
+            <button id="logBtn" class="btn btn-s">💾 Save Incident Log</button>
+            
+            <div class="hud-label" style="margin-top:20px;">⚠️ Keyword Flagging</div>
+            <div id="keywordAlert" style="font-size: 0.7rem; color: var(--d); font-weight: bold;">No triggers detected.</div>
+
+            <div class="hud-label" style="margin-top:20px;">🛡️ Regional Log</div>
+            <div id="logList">Waiting for data...</div>
+        </div>
+    </div>
+
+    <script>
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = true; recognition.interimResults = true;
+        
+        const scamKeywords = ["bank account details", "otp", "bank account", "immediately", "5 minutes", "transfer", "password", "urgent", "security block"];
+        let hSig = 0; let aSig = 0; let map; let fullText = ""; let finalAI = 0;
+        let lastFrequencies = [];
+
+        function updateAIAdvice(threatPercent) {
+            const adviceBox = document.getElementById('aiAdviceHUD');
+            const resFill = document.getElementById('resFill');
+            const resVal = document.getElementById('resVal');
+            const tFill = document.getElementById('threatFill');
+            const tVal = document.getElementById('threatVal');
+
+            tFill.style.width = threatPercent + "%";
+            tVal.innerText = threatPercent + "%";
+            resFill.style.width = (100 - threatPercent) + "%";
+            resVal.innerText = (100 - threatPercent) + "%";
+
+            if (threatPercent < 35) {
+                adviceBox.className = "adv-safe";
+                adviceBox.innerHTML = `<b>AI ADVISOR:</b> Normal variance.<br><b>PROCEDURE:</b> Proceed with standard caution.`;
+            } else if (threatPercent < 65) {
+                adviceBox.className = "adv-warn";
+                adviceBox.innerHTML = `<b>AI ADVISOR:</b> WARNING: UNUSUAL PATTERNS.<br><b>PROCEDURE:</b> Ask for a secret family word.`;
+            } else {
+                adviceBox.className = "adv-danger";
+                adviceBox.innerHTML = `<b>AI ADVISOR:</b> HIGH RISK: SYNTHETIC CLONE.<br><b>PROCEDURE:</b> HANG UP IMMEDIATELY. Call 1930.`;
+            }
+        }
+
+        async function startMonitor() {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const actx = new AudioContext();
+            const analyser = actx.createAnalyser();
+            const src = actx.createMediaStreamSource(stream);
+            src.connect(analyser);
+            analyser.fftSize = 256;
+            const data = new Uint8Array(analyser.frequencyBinCount);
+            const vctx = document.getElementById('visualizer').getContext('2d');
+            const vpCtx = document.getElementById('vpCanvas').getContext('2d');
+
+            function loop() {
+                analyser.getByteFrequencyData(data);
+                lastFrequencies = Array.from(data);
+                vctx.clearRect(0,0, 600, 80);
+                let sum = 0; for(let i=0; i<40; i++) sum += data[i];
+                let avg = sum / 40;
+
+                if (avg > 2) { (avg < 26) ? aSig++ : hSig++; }
+                document.getElementById('hCount').innerText = hSig;
+                document.getElementById('aCount').innerText = aSig;
+                
+                let threatPercent = Math.round((aSig / (hSig + aSig || 1)) * 100);
+                updateAIAdvice(threatPercent);
+
+                vctx.fillStyle = threatPercent > 50 ? '#dc2626' : '#4f46e5';
+                for(let i=0; i<60; i++) {
+                    let h = data[i]/2.5;
+                    vctx.fillRect(i*6, 80 - h, 4, h);
+                }
+                
+                vpCtx.clearRect(0, 0, 300, 160);
+                vpCtx.beginPath();
+                vpCtx.strokeStyle = threatPercent > 50 ? '#dc2626' : '#059669';
+                vpCtx.lineWidth = 2;
+                for(let i=0; i<data.length; i++) {
+                    let angle = (i / data.length) * Math.PI * 2;
+                    let radius = 30 + (data[i] / 3);
+                    let x = 150 + Math.cos(angle) * radius;
+                    let y = 80 + Math.sin(angle) * radius;
+                    if(i===0) vpCtx.moveTo(x,y); else vpCtx.lineTo(x,y);
+                }
+                vpCtx.stroke();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        recognition.onresult = (e) => {
+            let t = ""; for(let i=0; i<e.results.length; i++) t += e.results[i][0].transcript;
+            fullText = t;
+            document.getElementById('transcript').innerText = t;
+            
+            let found = scamKeywords.filter(k => t.toLowerCase().includes(k));
+            if(found.length > 0) {
+                document.getElementById('keywordAlert').innerText = "🚩 DETECTED: " + found.join(', ').toUpperCase();
+                aSig += 5; 
+            }
+        };
+
+        document.getElementById('startBtn').onclick = () => {
+            recognition.start(); startMonitor();
+            document.getElementById('startBtn').innerText = "📡 SCANNING...";
+            document.getElementById('statusHUD').innerText = "NCR MONITORING: ACTIVE";
+            initMap(28.6139, 77.2090);
+        };
+
+        function initMap(lat, lng) {
+            if (map) map.remove();
+            map = L.map('threatMap', {zoomControl: false, attributionControl: false}).setView([lat, lng], 11);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map);
+            L.circle([lat, lng], {color: '#4f46e5', radius: 4000, fillOpacity: 0.1}).addTo(map);
+        }
+
+        document.getElementById('logBtn').onclick = () => {
+            const logs = JSON.parse(localStorage.getItem('unifin_logs') || '[]');
+            const threatPercent = Math.round((aSig / (hSig + aSig || 1)) * 100);
+            const entry = { time: new Date().toLocaleTimeString(), node: "NCR_7", aiRatio: threatPercent };
+            logs.push(entry);
+            localStorage.setItem('unifin_logs', JSON.stringify(logs));
+            updateLogUI();
+        };
+
+        function updateLogUI() {
+            const logs = JSON.parse(localStorage.getItem('unifin_logs') || '[]');
+            document.getElementById('logList').innerHTML = logs.slice(-4).reverse().map(l => 
+                `<div style="margin-bottom:8px; padding:4px; border-bottom:1px solid rgba(0,0,0,0.05);">
+                    <b style="color:var(--p)">${l.time}</b> | Risk: ${l.aiRatio}%
+                </div>`
+            ).join('');
+        }
+        updateLogUI();
+
+        document.getElementById('stopBtn').onclick = () => {
+            document.getElementById('finalVerdict').style.display = "flex";
+            finalAI = Math.round((aSig / (hSig + aSig || 1)) * 100);
+            setTimeout(() => {
+                document.getElementById('vBar').style.width = finalAI + "%";
+                document.getElementById('vBar').style.background = finalAI > 50 ? '#dc2626' : '#059669';
+                document.getElementById('vTitle').innerText = finalAI > 50 ? "VERDICT: SCAM DETECTED" : "VERIFIED: HUMAN";
+                document.getElementById('vDesc').innerText = `Final analysis complete. Risk level recorded at ${finalAI}%.`;
+            }, 800);
+        };
+
+        window.downloadReport = () => {
+            const avgFreq = (lastFrequencies.reduce((a, b) => a + b, 0) / lastFrequencies.length).toFixed(2);
+            const keywordText = document.getElementById('keywordAlert').innerText;
+            const verdict = finalAI > 50 ? 'SCAMMER (AI CLONE)' : 'VERIFIED HUMAN';
+            
+            const content = `UNIFIN CAPITAL SENTINEL: VOICESTREAM AUDIT\n` +
+                          `==========================================\n` +
+                          `Location: Delhi (NCR Monitoring Sector)\n` +
+                          `Timestamp: ${new Date().toLocaleString()}\n` +
+                          `Final AI Risk Score: ${finalAI}%\n` +
+                          `Verdict: ${verdict}\n\n` +
+                          `Risk Score: ${finalAI}%\n` +
+                          `Keywords: ${keywordText}\n\n` +
+                          `VOICE PRINT DATA ANALYSIS:\n` +
+                          `- Spectral Average: ${avgFreq} Hz\n` +
+                          `- Robotic Cadence Variance: ${finalAI > 50 ? 'HIGH' : 'LOW'}\n\n` +
+                          `RECOMMENDED SECURITY ACTIONS:\n` +
+                          `${finalAI > 50 ? '1. HANG UP IMMEDIATELY.\n2. REPORT the incident to the National Cyber Crime Reporting Portal (1930).\n3. ALERT family members about potential voice clone targeting.' : '1. Continue standard security awareness.\n2. Never share personal sensitive info.'}\n\n` +
+                          `TRANSCRIPT RECORD:\n"${fullText || 'No transcript captured.'}"\n\n` +
+                          `Generated by UNIFIN by dominators`;
+            
+            const blob = new Blob([content], {type: 'text/plain'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Forensic_Report_${Date.now()}.txt`;
+            a.click();
+        };
+    </script>
+</body>
+</html>
