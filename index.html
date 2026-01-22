@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stability Tracker ₹</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <header>
+            <h1>Stability Tracker </h1>
+        </header>
+
+        <div class="dashboard-grid">
+            <section class="card">
+                <h3>Stability Status</h3>
+                <div class="score-container">
+                    <div class="gauge">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring__circle-bg" stroke="#eee" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                            <circle id="scoreRing" class="progress-ring__circle" stroke="#28a745" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                        </svg>
+                        <div class="score-text">
+                            <span id="scorePercent">0%</span>
+                            <small id="scoreLabel">Good</small>
+                        </div>
+                    </div>
+                </div>
+                <label>Monthly Budget (₹)</label>
+                <input type="number" id="monthlyBudget" value="50000">
+                <p>Remaining: <strong id="remainingBalance">₹50,000</strong></p>
+                <div class="progress-container">
+                    <div id="budgetBar" class="progress-fill"></div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Monthly Expense</h3>
+                <form id="expenseForm">
+                    <input type="number" id="amount" placeholder="Amount (₹)" required step="any">
+                    <select id="category">
+                        <option value="Food">Food & Grocery</option>
+                        <option value="Rent">Rent/Bills</option>
+                        <option value="Fun">Entertainment</option>
+                        <option value="Health">Healthcare</option>
+                        <option value="Miscellaneous">Miscellaneous</option>
+                    </select>
+                    <div class="toggle-row">
+                        <span>Want</span>
+                        <label class="switch">
+                            <input type="checkbox" id="isNeed" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span>Need</span>
+                    </div>
+                    <button type="submit" class="btn-add">Add Expense</button>
+                </form>
+            </section>
+
+            <section class="card full-width">
+                <h3>Recent Transactions</h3>
+                <ul id="transactionList"></ul>
+            </section>
+
+            <section class="card full-width">
+                <h3>Monthly Spending Heatmap</h3>
+                <div class="heatmap-container">
+                    <div id="heatmapGrid" class="heatmap-grid"></div>
+                </div>
+                <div class="heatmap-legend">
+                    <span><small class="box green"></small> High Stability</span>
+                    <span><small class="box red"></small> Low Stability</span>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
