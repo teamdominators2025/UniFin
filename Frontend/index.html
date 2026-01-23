@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniFin | Smart Finance</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="background-shape shape-1"></div>
+    <div class="background-shape shape-2"></div>
+    <div class="background-shape shape-3"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-area">
+                <h1>UniFin<span class="dot">.</span></h1>
+            </div>
+
+            <div class="language-selector" style="margin-left: auto; margin-right: 15px;">
+                <select id="langSelect" onchange="changeLanguage()">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी (Hindi)</option>
+                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                    <option value="gu">ગુજરાતી (Gujarati)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="ur">اردو (Urdu)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                </select>
+            </div>
+
+            <ul class="nav-list">
+                <li><a href="#home" class="nav-link" data-i18n="nav_home">Home</a></li>
+                <li><a href="#about" class="nav-link" data-i18n="nav_about">About Us</a></li>
+                <li><a href="#awareness" class="nav-link" data-i18n="nav_awareness">Awareness</a></li>
+                <li><a href="#security" class="nav-link" data-i18n="nav_security">Security</a></li>
+                <li><a href="#stability" class="nav-link" data-i18n="nav_stability">Financial Stability</a></li>
+                <li class="dropdown-item">
+    <a href="javascript:void(0)" class="nav-link" data-i18n="nav_downloads">
+        Downloads <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
+    </a>
+    <div class="dropdown-menu">
+        <a href="LEGAL–SAFE DISCLAIMER UniFin.pdf" target="_blank">
+            <i class="fas fa-file-pdf"></i> Legal Disclaimer
+        </a>
+        <a href="PRIVACY POLICY OF UniFin.pdf" target="_blank">
+            <i class="fas fa-user-shield"></i> Privacy Policy
+        </a>
+        <a href="UniFin FAQs.pdf" target="_blank">
+            <i class="fas fa-question-circle"></i> UniFin FAQs
+        </a>
+    </div>
+</li>
+                <li class="dropdown-item">
+        <a href="javascript:void(0)" class="nav-link highlight-btn" data-i18n="nav_links">
+            Links <i class="fas fa-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
+        </a>
+        <div class="dropdown-menu">
+            <a href="https://finmin.gov.in/" target="_blank">
+                <i class="fas fa-landmark"></i> Ministry of Finance
+            </a>
+            <a href="https://www.indiabudget.gov.in/" target="_blank">
+                <i class="fas fa-file-invoice-dollar"></i> Union Budget
+            </a>
+            <a href="https://www.pib.gov.in/indexd.aspx?reg=3&lang=2" target="_blank">
+                <i class="fas fa-newspaper"></i> PIB India
+            </a>
+            <a href="https://doe.gov.in/" target="_blank">
+                <i class="fas fa-building"></i> Dept. of Expenditure
+            </a>
+        </div>
+    </li>
+</ul>
+    </nav>
+
+    <header class="branding-header hidden-element" id="home">
+        <div class="container">
+            <h6 class="sub-header" data-i18n="hero_title">Bringing Financial Inclusion to One Screen</h6>
+            <p class="tagline" data-i18n="hero_tagline">One Nation. One Platform. Smart Finance.</p>
+        </div>
+    </header>
+
+    <main>
+       <section id="awareness" class="section-padding">
+  <div class="container">
+
+    <div class="section-header hidden-element">
+      <h3 data-i18n="sect_awareness">Awareness Hub</h3>
+      <div class="line"></div>
+    </div>
+
+    <!-- ✅ SAME GRID SYSTEM AS OTHER SECTIONS -->
+    <div class="card-grid col-3">
+
+      <!-- Card 1 -->
+      <div class="card hidden-element">
+        <div class="card-content">
+          <div class="icon-box gradient-1">
+            <i class="fas fa-landmark"></i>
+          </div>
+          <h4 data-i18n="card_schemes">Financial Inclusion Schemes</h4>
+          <p data-i18n="desc_schemes">
+            Access government initiatives designed to bridge the economic gap.
+          </p>
+          <a href="https://schemesfind.netlify.app/"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="explore-text">
+            Explore <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card hidden-element">
+        <div class="card-content">
+          <div class="icon-box gradient-2">
+            <i class="fas fa-gamepad"></i>
+          </div>
+          <h4 data-i18n="card_learning">Gamified Learning System</h4>
+          <p data-i18n="desc_learning">
+            Master finance through interactive levels and real-world simulations.
+          </p>
+          <a href="https://gamifiedlessons.netlify.app/"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="explore-text">
+            Play Now <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card hidden-element">
+  <div class="card-content">
+    <div class="icon-box gradient-3">
+      <i class="fas fa-chart-pie"></i>
+    </div>
+    <h4 data-i18n="card_budget">Current Budgeting</h4>
+    <p data-i18n="desc_budget">
+      A National-Level Indian Economic Tracker.
+    </p>
+    <a href="https://trackingmy.netlify.app/"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="explore-text">
+       Analyze <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+</div>
+
+    </div>
+  </div>
+</section>
+
+                       
+
+        <section id="security" class="section-padding bg-alt">
+            <div class="container">
+                <div class="section-header hidden-element">
+                    <h3 data-i18n="sect_security">Security & Protection</h3>
+                    <div class="line"></div>
+                    <p class="section-desc" data-i18n="sub_security">Advanced shielding against modern financial threats.</p>
+                </div>
+                
+                    <div class="card hidden-element" >
+                        <div class="card-content">
+                            <div class="icon-box gradient-4"><i class="fas fa-shield-alt"></i></div>
+                            <h4 data-i18n="card_upi">UPI Scam Shield</h4>
+                            <p data-i18n="desc_upi">Real-time transaction monitoring to prevent fraudulent UPI transfers before they happen.</p>
+                            <a href="https://charming-chimera-c80bca.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="explore-text">
+                            Activate Shield <i class="fas fa-arrow-right"></i>
+                        </a>
+                        </div>
+                    </div>
+
+                    <div class="card hidden-element">
+                        <div class="card-content">
+                            <div class="icon-box gradient-5"><i class="fas fa-phone-slash"></i></div>
+                            <h4 data-i18n="card_call">Call Threats (NLP)</h4>
+                            <p data-i18n="desc_call">AI-powered Natural Language Processing to detect and block scam calls instantly.</p>
+                            <a href="https://call-shield.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="explore-text">
+                            View Logs <i class="fas fa-arrow-right"></i>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stability" class="section-padding">
+            <div class="container">
+                <div class="section-header hidden-element">
+                    <h3 data-i18n="sect_stability">Financial Stability</h3>
+                    <div class="line"></div>
+                    <p class="section-desc" data-i18n="sub_stability">Tools to secure and grow your economic future.</p>
+                </div>
+
+               
+                    <div class="card hidden-element">
+                        <div class="card-content">
+                            <div class="icon-box gradient-6"> <i class="fas fa-receipt"></i></div>
+                            <h4 data-i18n="card_expense">Stability Tracker</h4>
+                            <p data-i18n="desc_expense">Automated categorization of your daily spends.</p>
+                            <a href="https://stability-tracker.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="explore-text">
+                            Track <i class="fas fa-arrow-right"></i>
+                        </a>
+                        </div>
+                    </div>
+
+                    <div class="card hidden-element">
+                        <div class="card-content">
+                            <div class="icon-box gradient-7"> <i class="fas fa-exclamation-triangle"></i></div>
+                            <h4 data-i18n="card_emi">EMI Risk Predictor</h4>
+                            <p data-i18n="desc_emi">Forecast potential defaults based on cash flow.</p>
+                            <a href="https://emiriskpredictor.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="explore-text">
+                        Check Risk <i class="fas fa-arrow-right"></i>
+                    </a>
+                    </div>
+                    </div>
+
+                    <div class="card hidden-element">
+                        <div class="card-content">
+                            <div class="icon-box gradient-8"> <i class="fas fa-briefcase"></i></div>
+                            <h4 data-i18n="card_portfolio">Portfolio Advisory</h4>
+                            <p data-i18n="desc_portfolio">Personalized investment strategies.</p>
+                            <a href="https://portfolioadvisory.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="explore-text">
+                            Invest <i class="fas fa-arrow-right"></i>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section-padding bg-alt">
+            <div class="container">
+                <div class="section-header hidden-element">
+                    <h3 data-i18n="sect_about">About Us - Team Dominators</h3>
+                    <div class="line"></div>
+                    <p class="section-desc" data-i18n="sub_about">The minds behind the UniFin Platform.</p>
+                </div>
+
+                <div class="card-grid">
+                    <div class="card team-card hidden-element">
+                        <div class="team-photo-box"><img src="sonali.jpg" alt="Sonali Kumari Jha"></div>
+                        <h4>Sonali Kumari Jha</h4>
+                        <span class="role-badge">Front-End Developer</span>
+                        <p>I am an enthusiastic learner with a strong foundation in Client-Side Web Development (Html,CSS,Javascript) and a growing interest in UI/UX design. I enjoy combining analytical thinking with creativity.</p>
+                        <div class="social-links">
+                            <a href="kumarijhasonali@gmail.com"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/sonali-kumari-jha-49961b37b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="card team-card hidden-element">
+                        <div class="team-photo-box"><img src="ria.png" alt="Ria Saraswat"></div>
+                        <h4>Ria Saraswat</h4>
+                        <span class="role-badge">Back-End Developer</span>
+                        <p>I possess strong foundation in Python while currently working on improving my technical skills and looking forward to opportunities where I can learn, contribute, and grow as a developer consistently</p>
+                        <div class="social-links">
+                            <a href="riasaraswat2020@gmail.com"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/ria-saraswat-604080362?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app&original_referer=https%3A%2F%2Fdmcis-teamdominators.netlify.app%2F"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="card team-card hidden-element">
+                        <div class="team-photo-box"><img src="swiku.png" alt="Swikriti Singh"></div>
+                        <h4>Swikriti Singh</h4>
+                        <span class="role-badge">Database Developer</span>
+                        <p>With a deep knowledge of C++, I enjoy working with structured data, and clean codes designing efficient databases and ML to solve real-world problems. I believe in learning by doing.</p>
+                        <div class="social-links">
+                            <a href="singhswikriti1@gmail.com"><i class="fas fa-envelope"></i></a>
+                            <a href="https://www.linkedin.com/in/swikriti-singh-4b2396399?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agenda-container hidden-element">
+                    <div class="agenda-box">
+                        <h4><i class="fas fa-bullseye"></i> <span data-i18n="agenda_title">Our Agenda</span></h4>
+                        <p data-i18n="agenda_desc_1">Our agenda is to simplify finance and empower users to make informed financial decisions through a single, unified fintech platform.</p>
+                        <p data-i18n="agenda_desc_2">By integrating awareness around digital payments, fraud prevention, and smart saving, we encourage responsible financial behavior.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; teamdominators2025@gmail.com</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
