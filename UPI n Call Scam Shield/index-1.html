@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIFIN– Advanced Scam Shield</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+    <style>
+        :root { --primary: #0a4cff; --accent: #00d4ff; --bg: #f8fbff; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; color: #333; }
+        
+        /* Persistent Tech Animation Background */
+        #vanta-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+        /* --- REVISED NAVIGATION STYLING --- */
+        nav { 
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(12px);
+            padding: 10px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            height: 70px; /* Fixed height for consistency */
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between links */
+        }
+
+        .nav-links a { 
+            text-decoration: none; 
+            color: #333; 
+            font-weight: 700; 
+            padding: 10px 18px; 
+            border-radius: 50px; 
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover { background: var(--primary); color: white; }
+
+        .lang-btn { 
+            background: #1a1a1a; 
+            color: white; 
+            border-radius: 30px; 
+            padding: 8px 18px; 
+            width: auto; /* Overriding global button width */
+            margin-left: 10px;
+            font-size: 0.85rem;
+        }
+        /* --- END NAVIGATION REVISIONS --- */
+
+        header { height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        
+        section { max-width: 1200px; margin: 40px auto; padding: 20px; position: relative; z-index: 1; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin-bottom: 25px; }
+        
+        #map { height: 550px; border-radius: 24px; border: 8px solid white; box-shadow: 0 15px 45px rgba(0,0,0,0.15); }
+
+        /* Enhanced Toolkit Grid */
+        .toolkit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; }
+        .tool-box { background: white; padding: 30px; border-radius: 24px; border-top: 6px solid var(--primary); transition: 0.3s; box-shadow: 0 8px 25px rgba(0,0,0,0.05); }
+        .tool-box:hover { transform: translateY(-5px); }
+
+        /* Emergency Guide Styling */
+        .guide-step { border-left: 6px solid var(--primary); padding: 25px; margin-bottom: 20px; background: #fff; border-radius: 0 20px 20px 0; box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
+        .step-header { font-weight: 800; font-size: 1.3rem; color: var(--primary); margin-bottom: 10px; }
+        .step-info { background: #f0f4ff; padding: 10px 15px; border-radius: 10px; margin: 10px 0; font-size: 0.95rem; line-height: 1.6; }
+        .btn-link { color: var(--primary); font-weight: bold; text-decoration: underline; cursor: pointer; }
+
+        button { background: var(--primary); color: white; border: none; padding: 14px 24px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; width: 100%; }
+        button:hover { filter: brightness(1.1); transform: scale(1.02); }
+        input, textarea { width: 100%; padding: 14px; margin: 10px 0; border-radius: 10px; border: 1.5px solid #eee; background: #fafafa; font-size: 1rem; }
+        
+        .lang-btn { background: #1a1a1a; color: white; border-radius: 30px; }
+    </style>
+</head>
+<body>
+
+<div id="vanta-canvas"></div>
+
+<nav>
+    <div style="font-size: 1.8rem; font-weight: 900; color: var(--primary);">UNIFIN</div>
+    <div class="nav-links">
+        <a href="#mapSection" data-en="HEATMAP" data-hi="नक्शा">HEATMAP</a>
+        <a href="#toolkitSection" data-en="TOOLKIT" data-hi="टूलकिट">TOOLKIT</a>
+        <a href="#guideSection" data-en="EMERGENCY" data-hi="आपातकालीन">EMERGENCY</a>
+        <button class="lang-btn" onclick="toggleLanguage()">हिन्दी / EN</button>
+    </div>
+</nav>
+
+<header style="height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+    <h1 id="mainTitle" 
+        data-en="UNIFIN SCAM SHIELD" 
+        data-hi="यूनिफिन स्कैम शील्ड" 
+        style="font-size: 4rem; margin: 0;">UNIFIN SCAM SHIELD</h1>
+    
+    <p id="subTitle" 
+       data-en="Interactive Scam Defense For User" 
+       data-hi="उपयोगकर्ता के लिए इंटरएक्टिव स्कैम डिफेंस" 
+       style="font-size: 1.5rem; opacity: 0.8;">Interactive Scam Defense For User</p>
+</header>
+
+<section id="mapSection">
+    <h2 data-en="📍 National Cyber Risk Map (28 States)" data-hi="📍 राष्ट्रीय साइबर जोखिम मानचित्र">📍 National Cyber Risk Map (28 States)</h2>
+    <div id="map"></div>
+</section>
+
+<section id="toolkitSection">
+    <h2 data-en="🚨 Advanced Security Toolkit" data-hi="🚨 उन्नत सुरक्षा टूलकिट">🚨 Advanced Security Toolkit</h2>
+    <div class="toolkit-grid">
+        <div class="tool-box">
+            <h3 data-en="🔗 Phishing Link Analyzer" data-hi="🔗 फिशिंग लिंक विश्लेषक">🔗 Phishing Link Analyzer</h3>
+            <p data-en="Check if a URL is safe or a trap." data-hi="जांचें कि लिंक सुरक्षित है या जाल।">Check if a URL is safe or a trap.</p>
+            <input id="urlInput" placeholder="Paste link (e.g. bit.ly/...)">
+            <button onclick="checkURL()" data-en="Scan Link" data-hi="लिंक स्कैन करें">Scan Link</button>
+            <div id="urlResult" style="margin-top:15px;"></div>
+        </div>
+
+        <div class="tool-box">
+            <h3 data-en="📷 QR Payment Guard" data-hi="📷 क्यूआर भुगतान गार्ड">📷 QR Payment Guard</h3>
+            <p data-en="Scan QR images to detect 'Collect Money' requests." data-hi="पैसे मांगने वाले क्यूआर की पहचान करें।">Scan QR images to detect 'Collect Money' requests.</p>
+            <input type="file" onchange="scanQR(event)" style="border:none; background:transparent;">
+            <div id="qrResult" style="margin-top:15px;"></div>
+        </div>
+
+        <div class="tool-box">
+            <h3 data-en="💸 UPI Message Audit" data-hi="💸 यूपीआई संदेश ऑडिट">💸 UPI Message Audit</h3>
+            <p data-en="Verify IDs and SMS messages for fraud triggers." data-hi="धोखाधड़ी के संकेतों के लिए संदेशों की जांच करें।">Verify IDs and SMS messages for fraud triggers.</p>
+            <input id="upiId" placeholder="Sender UPI ID">
+            <textarea id="upiMsg" placeholder="Paste the SMS/WhatsApp message..."></textarea>
+            <button onclick="checkUPI()" data-en="Verify Safety" data-hi="सुरक्षा जांचें">Verify Safety</button>
+            <div id="upiResult" style="margin-top:15px;"></div>
+        </div>
+    </div>
+</section>
+
+<section id="guideSection">
+    <h2 data-en="🛡️ Emergency Response Protocol" data-hi="🛡️ आपातकालीन प्रतिक्रिया प्रोटोकॉल">🛡️ Emergency Response Protocol</h2>
+    
+    <div class="guide-step">
+        <div class="step-header">⏱️ STEP 1: Act Immediately (within minutes)</div>
+        <p>👉 <b>Do not wait. Time is critical.</b><br>
+           📞 <b>Call 1930</b> (National Cyber Crime Helpline)<br>
+           Toll-free | 24×7 | Works for: UPI, Banking, OTP, & Card fraud.<br>
+           📌 <b>Purpose:</b> Helps freeze the scammer’s bank account before money is withdrawn.</p>
+    </div>
+
+    <div class="guide-step">
+        <div class="step-header">🔒 STEP 2: Inform Your Bank Immediately</div>
+        <p>Call bank customer care/fraud helpline: <i>"I want to report an unauthorized transaction."</i></p>
+        <div class="step-info">
+            <b>Ask them to:</b> Block UPI/Card/Net Banking & freeze account.<br>
+            <b>Note down:</b> Complaint number, Date/Time, Executive name.
+        </div>
+    </div>
+
+    <div class="guide-step">
+        <div class="step-header">🧾 STEP 3: File Online Cyber Crime Complaint</div>
+        <p>Within 24 hours, file at <a href="https://cybercrime.gov.in" target="_blank" class="btn-link">cybercrime.gov.in</a></p>
+        <div class="step-info">
+            Click <b>Report Cyber Crime</b> → Financial Fraud. Enter: Bank name, UPI ID, Transaction ID, and Amount lost.
+        </div>
+        <p>✅ <b>Save the Complaint Acknowledgement Number.</b></p>
+    </div>
+
+    <div class="guide-step">
+        <div class="step-header">🏦 STEP 4: Raise UPI Dispute (If UPI Scam)</div>
+        <p>Open GPay / PhonePe / Paytm → <b>Help → Report a problem</b> → Select transaction → Fraud.</p>
+        <p>If unresolved: <a href="https://www.npci.org.in/what-we-do/upi/dispute-redressal-mechanism" target="_blank" class="btn-link">NPCI UPI Dispute Guidance</a></p>
+    </div>
+
+    <div class="guide-step">
+        <div class="step-header">⚖️ STEP 5: Escalate to RBI (If Bank Doesn’t Help)</div>
+        <p>If unresolved within 30 days: <a href="https://cms.rbi.org.in" target="_blank" class="btn-link">RBI Complaint Portal (CMS)</a></p>
+    </div>
+
+    <div class="guide-step">
+        <div class="step-header">📄 STEP 6: Visit Police Station (If Required)</div>
+        <p>Carry: Cyber complaint acknowledgement, bank statement, transaction details, and ID proof. Police may file an FIR for large amounts.</p>
+    </div>
+</section>
+<script>
+    /* --- VANTA TECH BACKGROUND --- */
+    VANTA.NET({
+        el: "#vanta-canvas",
+        mouseControls: true, touchControls: true, gyroControls: false,
+        minHeight: 200.00, minWidth: 200.00, scale: 1.00, scaleMobile: 1.00,
+        color: 0x0a4cff, backgroundColor: 0xf8fbff, points: 12.00, maxDistance: 22.00, spacing: 16.00
+    });
+
+    /* --- MAP DATA --- */
+    var map = L.map('map').setView([22.9734, 78.6569], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    const states = [
+        {n: "Andhra Pradesh", lat: 15.91, lng: 79.74, r: "Med", c: "orange"},
+        {n: "Arunachal", lat: 28.21, lng: 94.72, r: "Low", c: "green"},
+        {n: "Assam", lat: 26.20, lng: 92.93, r: "Med", c: "orange"},
+        {n: "Bihar", lat: 25.09, lng: 85.31, r: "High", c: "red"},
+        {n: "Chhattisgarh", lat: 21.27, lng: 81.86, r: "Med", c: "orange"},
+        {n: "Goa", lat: 15.29, lng: 74.12, r: "Low", c: "green"},
+        {n: "Gujarat", lat: 22.25, lng: 71.19, r: "Med", c: "orange"},
+        {n: "Haryana", lat: 29.05, lng: 76.08, r: "High", c: "red"},
+        {n: "Himachal", lat: 31.10, lng: 77.17, r: "Low", c: "green"},
+        {n: "Jharkhand", lat: 23.61, lng: 85.27, r: "High", c: "red"},
+        {n: "Karnataka", lat: 15.31, lng: 75.71, r: "High", c: "red"},
+        {n: "Kerala", lat: 10.85, lng: 76.27, r: "Low", c: "green"},
+        {n: "Madhya Pradesh", lat: 22.97, lng: 78.65, r: "Med", c: "orange"},
+        {n: "Maharashtra", lat: 19.75, lng: 75.71, r: "High", c: "red"},
+        {n: "Manipur", lat: 24.66, lng: 93.90, r: "Low", c: "green"},
+        {n: "Meghalaya", lat: 25.46, lng: 91.36, r: "Low", c: "green"},
+        {n: "Mizoram", lat: 23.16, lng: 92.93, r: "Low", c: "green"},
+        {n: "Nagaland", lat: 26.15, lng: 94.56, r: "Low", c: "green"},
+        {n: "Odisha", lat: 20.95, lng: 85.09, r: "Med", c: "orange"},
+        {n: "Punjab", lat: 31.14, lng: 75.34, r: "Med", c: "orange"},
+        {n: "Rajasthan", lat: 27.02, lng: 74.21, r: "High", c: "red"},
+        {n: "Sikkim", lat: 27.53, lng: 88.51, r: "Low", c: "green"},
+        {n: "Tamil Nadu", lat: 11.12, lng: 78.65, r: "Med", c: "orange"},
+        {n: "Telangana", lat: 18.11, lng: 79.01, r: "High", c: "red"},
+        {n: "Tripura", lat: 23.94, lng: 91.98, r: "Low", c: "green"},
+        {n: "Uttar Pradesh", lat: 26.84, lng: 80.94, r: "High", c: "red"},
+        {n: "Uttarakhand", lat: 30.06, lng: 79.01, r: "Low", c: "green"},
+        {n: "West Bengal", lat: 22.98, lng: 87.85, r: "High", c: "red"}
+    ];
+
+    states.forEach(s => {
+        L.circle([s.lat, s.lng], { color: s.c, radius: 55000, fillOpacity: 0.5 }).addTo(map)
+        .bindPopup(`<b>${s.n}</b><br>Cyber Risk Level: ${s.r}`);
+    });
+
+    /* --- MULTI-LINGUAL SUPPORT --- */
+    let currentLang = 'en';
+    function toggleLanguage() {
+        currentLang = currentLang === 'en' ? 'hi' : 'en';
+        document.querySelectorAll('[data-en]').forEach(el => {
+            el.innerText = el.getAttribute(`data-${currentLang}`);
+        });
+    }
+
+        /* --- FIXED TOOLKIT FUNCTIONS --- */
+async function checkURL() { 
+    // Fixed: selector matches the specific ID 'urlInput'
+    const urlInput = document.getElementById('urlInput').value;
+    const res = document.getElementById('urlResult');
+    
+    if (!urlInput) {
+        res.innerHTML = "❌ Please enter a URL first.";
+        return;
+    }
+
+    res.innerHTML = "🔍 <b>Scanning URL...</b>";
+    
+    try {
+        const response = await fetch('http://127.0.0.1:5000/check_url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: urlInput })
+        });
+        const data = await response.json();
+        res.innerHTML = data.result;
+        res.style.color = data.level === "high" ? "red" : "green";
+    } catch (err) {
+        res.innerHTML = "❌ Error connecting to backend. Is it running?";
+    }
+}
+
+async function checkUPI() {
+    const message = document.getElementById('upiMsg').value;
+    const upiId = document.getElementById('upiId').value;
+    const res = document.getElementById('upiResult');
+
+    if (!message && !upiId) {
+        res.innerHTML = "❌ Please enter a UPI ID or paste a message.";
+        return;
+    }
+
+    res.innerHTML = "🔍 <b>Analyzing Message...</b>";
+    
+    try {
+        const response = await fetch('http://127.0.0.1:5000/check_upi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: message, upi_id: upiId })
+        });
+        const data = await response.json();
+        res.innerHTML = data.result;
+        res.style.color = data.level === "high" ? "red" : "green";
+    } catch (err) {
+        res.innerHTML = "❌ Error connecting to backend.";
+    }
+}
+
+async function scanQR(event) {
+    const file = event.target.files[0];
+    const res = document.getElementById('qrResult');
+    if (!file) return;
+
+    res.innerHTML = "⌛ <b>Processing Image...</b>";
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+        const img = new Image();
+        img.onload = async () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            // jsQR library (linked in your head) does the work here
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+            
+            if (code) {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/check_qr', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content: code.data })
+                    });
+                    const data = await response.json();
+                    res.innerHTML = data.result;
+                    res.style.color = data.level === "high" ? "red" : "green";
+                } catch (err) {
+                    res.innerHTML = "❌ Error connecting to backend.";
+                }
+            } else {
+                res.innerHTML = "❌ Could not find a valid QR code.";
+                res.style.color = "orange";
+            }
+        };
+        img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+}
+    
+</script>
+
+</body>
+</html>
