@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIFIN– Advanced Scam Shield</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+</head>
+<body>
+
+<div id="vanta-canvas"></div>
+
+<nav>
+    <div style="font-size: 1.8rem; font-weight: 900; color: var(--primary);">UNIFIN</div>
+    <div class="nav-links">
+        <a href="#mapSection" data-en="HEATMAP" data-hi="नक्शा">HEATMAP</a>
+        <a href="#toolkitSection" data-en="TOOLKIT" data-hi="टूलकिट">TOOLKIT</a>
+        <a href="#guideSection" data-en="EMERGENCY" data-hi="आपातकालीन">EMERGENCY</a>
+        <button class="lang-btn" onclick="toggleLanguage()">हिन्दी / EN</button>
+    </div>
+</nav>
+
+<header>
+    <h1 id="mainTitle" data-en="UNIFIN SCAM SHIELD" data-hi="यूनिफिन स्कैम शील्ड" style="font-size: 4rem; margin: 0;">UNIFIN SCAM SHIELD</h1>
+    <p id="subTitle" data-en="Interactive Scam Defense For User" data-hi="उपयोगकर्ता के लिए इंटरएक्टिव स्कैम डिफेंस" style="font-size: 1.5rem; opacity: 0.8;">Interactive Scam Defense For User</p>
+</header>
+
+<section id="mapSection">
+    <h2 data-en="📍 National Cyber Risk Map (28 States)" data-hi="📍 राष्ट्रीय साइबर जोखिम मानचित्र">📍 National Cyber Risk Map (28 States)</h2>
+    <div id="map"></div>
+</section>
+
+<section id="toolkitSection">
+    <h2 data-en="🚨 Advanced Security Toolkit" data-hi="🚨 उन्नत सुरक्षा टूलकिट">🚨 Advanced Security Toolkit</h2>
+    
+    <button class="test-toggle-btn" onclick="toggleTestPanel()">
+        <span>🧪 For Testing</span>
+        <small>(Click to expand)</small>
+    </button>
+
+    <div id="testPanel" class="test-content-area">
+        <p style="margin-top:0; font-weight:bold; color:#666;">Click any item below to copy it automatically:</p>
+        <div class="test-grid">
+            <div class="test-category">
+                <h4>URL Testing</h4>
+                <div class="test-item threat" onclick="copyValue('http://my-bank-login.com')">
+                    <span class="label threat">Threat</span>
+                    http://my-bank-login.com
+                </div>
+                <div class="test-item threat" onclick="copyValue('https://bit.ly/claim-your-prize-now')">
+                    <span class="label threat">Threat</span>
+                    https://bit.ly/claim-your-prize-now
+                </div>
+                <div class="test-item safe" onclick="copyValue('https://www.google.com/')">
+                    <span class="label safe">Safe</span>
+                    https://www.google.com/
+                </div>
+                <div class="test-item safe" onclick="copyValue('https://web.whatsapp.com/')">
+                    <span class="label safe">Safe</span>
+                    https://web.whatsapp.com/
+                </div>
+            </div>
+
+            <div class="test-category">
+                <h4>UPI Message Testing</h4>
+                <div class="test-item threat" onclick="copyValue('Congratulations! You won a cashback of ₹500. Click here to approve and enter your pin to claim.')">
+                    <span class="label threat">Threat</span>
+                    Congratulations! You won a cashback...
+                    <span class="copy-hint">Click to copy full message</span>
+                </div>
+                <div class="test-item threat" onclick="copyValue('Your account is blocked. Call our helpline to get a refund of your processing fee.')">
+                    <span class="label threat">Threat</span>
+                    Your account is blocked. Call our helpline...
+                </div>
+                <div class="test-item safe" onclick="copyValue('Hi Mom, I reached the hostel safely. Will call you tonight.')">
+                    <span class="label safe">Safe</span>
+                    Hi Mom, I reached the hostel safely...
+                </div>
+                <div class="test-item safe" onclick="copyValue('Your electricity bill for January is ₹1,240. Please pay by the 15th to avoid late fees')">
+                    <span class="label safe">Safe</span>
+                    Your electricity bill for January is ₹1,240...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toolkit-grid">
+        <div class="tool-box">
+            <h3 data-en="🔗 Phishing Link Analyzer" data-hi="🔗 फिशिंग लिंक विश्लेषक">🔗 Phishing Link Analyzer</h3>
+            <p data-en="Check if a URL is safe or a trap." data-hi="जांचें कि लिंक सुरक्षित है या जाल।">Check if a URL is safe or a trap.</p>
+            <input id="urlInput" placeholder="Paste link (e.g. bit.ly/...)">
+            <button onclick="checkURL()" data-en="Scan Link" data-hi="लिंक स्कैन करें">Scan Link</button>
+            <div id="urlResult" style="margin-top:15px;"></div>
+        </div>
+
+        <div class="tool-box">
+            <h3 data-en="📷 QR Payment Guard" data-hi="📷 क्यूआर भुगतान गार्ड">📷 QR Payment Guard</h3>
+            <p data-en="Scan QR images to detect 'Collect Money' requests." data-hi="पैसे मांगने वाले क्यूआर की पहचान करें।">Scan QR images to detect 'Collect Money' requests.</p>
+            <input type="file" onchange="scanQR(event)" style="border:none; background:transparent;">
+            <div id="qrResult" style="margin-top:15px;"></div>
+        </div>
+
+        <div class="tool-box">
+            <h3 data-en="💸 UPI Message Audit" data-hi="💸 यूपीआई संदेश ऑडिट">💸 UPI Message Audit</h3>
+            <p data-en="Verify IDs and SMS messages for fraud triggers." data-hi="धोखाधड़ी के संकेतों के लिए संदेशों की जांच करें।">Verify IDs and SMS messages for fraud triggers.</p>
+            <input id="upiId" placeholder="Sender UPI ID">
+            <textarea id="upiMsg" placeholder="Paste the SMS/WhatsApp message..."></textarea>
+            <button onclick="checkUPI()" data-en="Verify Safety" data-hi="सुरक्षा जांचें">Verify Safety</button>
+            <div id="upiResult" style="margin-top:15px;"></div>
+        </div>
+    </div>
+</section>
+
+<section id="guideSection">
+    <h2 data-en="🛡️ Emergency Response Protocol" data-hi="🛡️ आपातकालीन प्रतिक्रिया प्रोटोकॉल">🛡️ Emergency Response Protocol</h2>
+    <div class="guide-step">
+        <div class="step-header">⏱️ STEP 1: Act Immediately (within minutes)</div>
+        <p>👉 <b>Do not wait. Time is critical.</b><br>
+           📞 <b>Call 1930</b> (National Cyber Crime Helpline)<br>
+           Toll-free | 24×7 | Works for: UPI, Banking, OTP, & Card fraud.<br>
+           📌 <b>Purpose:</b> Helps freeze the scammer’s bank account before money is withdrawn.</p>
+    </div>
+    <div class="guide-step">
+        <div class="step-header">🔒 STEP 2: Inform Your Bank Immediately</div>
+        <p>Call bank customer care/fraud helpline: <i>"I want to report an unauthorized transaction."</i></p>
+        <div class="step-info">
+            <b>Ask them to:</b> Block UPI/Card/Net Banking & freeze account.<br>
+            <b>Note down:</b> Complaint number, Date/Time, Executive name.
+        </div>
+    </div>
+    <div class="guide-step">
+        <div class="step-header">🧾 STEP 3: File Online Cyber Crime Complaint</div>
+        <p>Within 24 hours, file at <a href="https://cybercrime.gov.in" target="_blank" class="btn-link">cybercrime.gov.in</a></p>
+        <div class="step-info">
+            Click <b>Report Cyber Crime</b> → Financial Fraud. Enter: Bank name, UPI ID, Transaction ID, and Amount lost.
+        </div>
+        <p>✅ <b>Save the Complaint Acknowledgement Number.</b></p>
+    </div>
+    <div class="guide-step">
+        <div class="step-header">🏦 STEP 4: Raise UPI Dispute (If UPI Scam)</div>
+        <p>Open GPay / PhonePe / Paytm → <b>Help → Report a problem</b> → Select transaction → Fraud.</p>
+        <p>If unresolved: <a href="https://www.npci.org.in/what-we-do/upi/dispute-redressal-mechanism" target="_blank" class="btn-link">NPCI UPI Dispute Guidance</a></p>
+    </div>
+    <div class="guide-step">
+        <div class="step-header">⚖️ STEP 5: Escalate to RBI (If Bank Doesn’t Help)</div>
+        <p>If unresolved within 30 days: <a href="https://cms.rbi.org.in" target="_blank" class="btn-link">RBI Complaint Portal (CMS)</a></p>
+    </div>
+    <div class="guide-step">
+        <div class="step-header">📄 STEP 6: Visit Police Station (If Required)</div>
+        <p>Carry: Cyber complaint acknowledgement, bank statement, transaction details, and ID proof.</p>
+    </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
